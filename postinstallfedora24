@@ -1,0 +1,257 @@
+#!/bin/bash
+#
+#This program is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the Free Software Foundation, #either version 3 of the License, or (at your option) any later version.
+#
+#This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR #PURPOSE. See the GNU General Public License for more details.
+#
+#You should have received a copy of the GNU General Public License along with this program. If not, see gnu.org/licenses.
+#
+# Inspired by the project Fedy https://github.com/folkswithhats/fedy
+#
+VERSION="24-20160603"
+
+#=============================================================================
+# Liste des applications à installer: A adapter a vos besoins
+LISTE="nano wget langpacks-fr htop ccze most bash-completion gnome-tweak-tool"
+#=============================================================================
+
+### Test que le script est lance en root
+if [ $EUID -ne 0 ]; then
+  echo "Le script doit être lancé en root: # sudo $0" 1>&2
+  exit 1
+fi
+
+### Welcome
+echo -ne "\033[32;1mLe script va effectuer les actions suivantes :\n -activer les dépôts RPMFusion\n -faire les mises à jours\n -installer : \033[0m"
+echo -ne "\033[32;1m$LISTE \n \033[0m"
+echo -ne "\033[32;1mVoulez-vous continuer ? (y/N): \033[0m"
+read WELCOME
+: ${WELCOME:="N"}
+if [[ ${WELCOME} == [Nn] ]]; then
+  exit 0
+fi
+
+### Update
+rpm --quiet --query rpmfusion-free-release || dnf -y --nogpgcheck install http://download1.rpmfusion.org/free/fedora/rpmfusion-free-release-24.noarch.rpm
+rpm --quiet --query rpmfusion-nonfree-release || dnf -y --nogpgcheck install http://download1.rpmfusion.org/nonfree/fedora/rpmfusion-nonfree-release-24.noarch.rpm
+echo -e "\033[34m========================================================================================================\033[0m"
+echo "Mises à jours du système"
+echo -e "\033[34m========================================================================================================\033[0m"
+dnf -y upgrade
+clear
+
+### Installation
+echo -e "\033[34m========================================================================================================\033[0m"
+echo "Installation des logiciels suivants: $LISTE"
+echo -e "\033[34m========================================================================================================\033[0m"
+dnf -y install $LISTE
+
+### Configuration bashrc
+cat > $HOME/.bashrc << EOL
+#-------------------
+# Alias
+#-------------------
+# la couleur pour chaque type de fichier, les répertoires s'affichent en premier
+alias ls='ls -h --color --group-directories-first'
+# affiche les fichiers cachés
+alias lsa='ls -A'
+# affiche en mode liste détail
+alias ll='ls -ls'
+# affiche en mode liste détail + fichiers cachés
+alias lla='ls -Al'
+# tri par extension
+alias lx='ls -lXB'
+ # tri par taille, le plus lourd à la fin
+alias lk='ls -lSr'
+# tri par date de modification, la plus récente à la fin
+alias lc='ls -ltcr'
+# tri par date d’accès, la plus récente à la fin
+alias lu='ls -ltur'
+# tri par date, la plus récente à la fin
+alias lt='ls -ltr'
+# Pipe a travers 'more'
+alias lm='ls -al | more'
+# ls récurssif
+alias lr='ls -lR'
+# affiche les dernière d'un fichier log (par exemple) en live
+alias voirlog='tail -f'
+# commande df avec l'option -human
+alias df='df -kTh'
+# commande du avec l'option -human
+alias du='du -kh'
+# commande du avec l'option -human, au niveau du répertoire courant
+alias duc='du -kh --max-depth=1'
+# commande free avec l'option affichage en Mo
+alias free='free -m'
+# nécessite le paquet "htop", un top amélioré et en couleur
+alias top='htop'
+# faire une recherche dans l'historique de commande
+alias shistory='history | grep'
+# raccourci history
+alias h='history'
+
+# Ajout log en couleurs
+ctail() { tail -f \$1 | ccze -A; }
+cless() { ccze -A < \$1 | less -R; }
+
+#set a fancy prompt (non-color, unless we know we want color)
+PS1="\\\[\\\033[01;31m\\\][\\\u@\\\h\\\[\\\033[00m\\\]:\\\[\\\033[01;34m\\\]\\\w]\\\[\\\033[00m\\\]\\\$ "
+
+# activation date_heure dans la commande history
+export HISTTIMEFORMAT="%Y/%m/%d_%T : "
+
+# les pages de man en couleur, necessite le paquet most
+export PAGER=most
+
+# enable bash completion in interactive shells
+if [ -f /etc/bash_completion ]; then
+		. /etc/bash_completion
+fi
+EOL
+clear
+
+### Désactiver SELinux
+echo -ne "\033[32;1mVoulez-vous désactiver SELinux (y/N): \033[0m"
+read SELINUX
+: ${SELINUX:="N"}
+if [[ ${SELINUX} == [Yy] ]]; then
+  sed -i s/^SELINUX=.*$/SELINUX=disabled/g /etc/selinux/config
+fi
+
+### Install Arc-Theme
+echo -ne "\033[32;1mVoulez-vous installer le theme Arc (https://github.com/horst3180/Arc-theme) (y/N): \033[0m"
+read ARCTHEME
+: ${ARCTHEME:="N"}
+if [[ ${ARCTHEME} == [Yy] ]]; then
+  dnf config-manager --add-repo=http://download.opensuse.org/repositories/home:Horst3180/Fedora_24_standard/home:Horst3180.repo
+  dnf -y install arc-theme
+fi
+
+### Install MSFONTS
+echo -ne "\033[32;1mVoulez-vous installer les polices Microsoft (y/N): \033[0m"
+read MSFONTS
+: ${MSFONTS:="N"}
+if [[ ${MSFONTS} == [Yy] ]]; then
+  dnf -y install curl cabextract xorg-x11-font-utils fontconfig
+
+  CACHEDIR="/tmp/mscorefonts";
+  mkdir -p "$CACHEDIR"
+  cd "$CACHEDIR"
+
+  URL=$(wget http://mscorefonts2.sourceforge.net/ -O - | grep -Po https://downloads.sourceforge.net/project/mscorefonts2/rpms/msttcore-fonts-installer-[0-9.]{3}-[0-9].noarch.rpm)
+  FILE=${URL##*/}
+
+  wget -c "$URL" -O "$FILE"
+
+  if [[ ! -f "$FILE" ]]; then
+    exit 1
+  fi
+    dnf -y install "$FILE"
+fi
+
+### Install SKYPE
+echo -ne "\033[32;1mVoulez-vous installer Skype (y/N): \033[0m"
+read SKYPE
+: ${SKYPE:="N"}
+if [[ ${SKYPE} == [Yy] ]]; then
+  CACHEDIR="/tmp/skype"
+
+  mkdir -p "$CACHEDIR"
+  cd "$CACHEDIR"
+
+  URL="http://www.skype.com/go/getskype-linux-fc10"
+  FILE="skype_linux.rpm"
+
+  wget -c "$URL" -O "$FILE"
+
+  if [[ ! -f "$FILE" ]]; then
+    exit 1
+  fi
+    dnf -y install gtk2-engines.i686
+    dnf -y install $FILE
+fi
+
+### Install TEAMVIEWER
+echo -ne "\033[32;1mVoulez-vous installer TeamViewer (y/N): \033[0m"
+read TEAMVIEWER
+: ${TEAMVIEWER:="N"}
+if [[ ${TEAMVIEWER} == [Yy] ]]; then
+  dnf -y install http://download.teamviewer.com/download/teamviewer.i686.rpm
+fi
+
+### Install TERMINIX
+echo -ne "\033[32;1mVoulez-vous installer Terminix (via Copr heikoada) (y/N): \033[0m"
+read TERMINIX
+: ${TERMINIX:="N"}
+if [[ ${TERMINIX} == [Yy] ]]; then
+  dnf copr enable heikoada/terminix
+  dnf -y install terminix
+fi
+
+### Install ATOM
+echo -ne "\033[32;1mVoulez-vous installer Atom (via Copr mosquito) (y/N): \033[0m"
+read ATOM
+: ${ATOM:="N"}
+if [[ ${ATOM} == [Yy] ]]; then
+  dnf copr enable mosquito/atom
+  dnf -y install atom
+fi
+
+### Install CODECS
+echo -ne "\033[32;1mVoulez-vous installer les codecs multimédia (y/N): \033[0m"
+read CODECS
+: ${CODECS:="N"}
+if [[ ${CODECS} == [Yy] ]]; then
+  dnf -y install gstreamer-plugins-bad gstreamer-plugins-bad-free-extras gstreamer-plugins-bad-nonfree gstreamer-plugins-ugly gstreamer1-libav gstreamer1-plugins-bad-free-extras gstreamer1-plugins-bad-freeworld gstreamer1-plugins-base-tools gstreamer1-plugins-good-extras gstreamer1-plugins-ugly gstreamer1-plugins-bad-free gstreamer1-plugins-good gstreamer1-plugins-base lame flac faac faad2 amrnb amrwb libmad libmatroska xvidcore x264 x265
+fi
+
+### Install Thunderbird
+echo -ne "\033[32;1mVoulez-vous installer Thunderbird (y/N): \033[0m"
+read THUNDERBIRD
+: ${THUNDERBIRD:="N"}
+if [[ ${THUNDERBIRD} == [Yy] ]]; then
+  dnf -y install thunderbird
+fi
+
+### Install GIT
+echo -ne "\033[32;1mVoulez-vous installer les outils Git, GitFlow, git-extras et git-ftp (y/N): \033[0m"
+read GIT
+: ${GIT:="N"}
+if [[ ${GIT} == [Yy] ]]; then
+  dnf -y install git gitflow git-extras git-ftp
+fi
+
+### Install FEDY
+echo -ne "\033[32;1mVoulez-vous installer Fedy (y/N): \033[0m"
+read FEDY
+: ${FEDY:="N"}
+if [[ ${FEDY} == [Yy] ]]; then
+  bash -c 'su -c "curl http://folkswithhats.org/fedy-installer -o fedy-installer && chmod +x fedy-installer && ./fedy-installer"'
+fi
+
+### Nettoyage Gnome Apps
+echo -ne "\033[32;1mVoulez-vous supprimer gnome-photos gnome-weather gnome-boxes gnome-clocks (y/N): \033[0m"
+read RMGNOME
+: ${RMGNOME:="N"}
+if [[ ${RMGNOME} == [Yy] ]]; then
+  dnf -y remove gnome-photos gnome-weather gnome-boxes gnome-clocks
+fi
+
+### Nettoyage DNF
+echo -ne "\033[32;1mVoulez-vous supprimer les dépendances orphelines (y/N): \033[0m"
+read RMDNF
+: ${RMDNF:="N"}
+if [[ ${RMDNF} == [Yy] ]]; then
+  dnf autoremove
+fi
+
+### END ###
+clear
+echo -e "\033[34m========================================================================================================\033[0m"
+echo "Liste d'applications utiles installées"
+echo "$LISTE"
+echo ""
+echo "Suivre les nouvelles du projet Fedora : https://fedoramagazine.org/"
+echo "Participer au développement : http://whatcanidoforfedora.org/"
+echo ""
+echo -e "\033[34m========================================================================================================\033[0m"

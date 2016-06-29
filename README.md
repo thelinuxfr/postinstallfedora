@@ -1,6 +1,7 @@
 # PostInstallFedora
 
 Petit script permettant d'automatiser plusieurs tâches pour Fedora.
+
 **ATTENTION** : le script remplace certains paramètres (bashrc, sources.list)
 
 ### Fedora 24
