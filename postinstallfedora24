@@ -230,8 +230,16 @@ if [[ ${FEDY} == [Yy] ]]; then
   bash -c 'su -c "curl http://folkswithhats.org/fedy-installer -o fedy-installer && chmod +x fedy-installer && ./fedy-installer"'
 fi
 
+### Install Owncloud-Client
+echo -ne "\033[32;1mVoulez-vous installer Owncloud-Client (y/N): \033[0m"
+read OWNCLOUD
+: ${OWNCLOUD:="N"}
+if [[ ${OWNCLOUD} == [Yy] ]]; then
+  dnf -y install owncloud-client owncloud-client-nautilus
+fi
+
 ### Nettoyage Gnome Apps
-echo -ne "\033[32;1mVoulez-vous supprimer gnome-photos gnome-weather gnome-boxes gnome-clocks gnome-maps(y/N): \033[0m"
+echo -ne "\033[32;1mVoulez-vous supprimer gnome-photos gnome-weather gnome-boxes gnome-clocks gnome-maps (y/N): \033[0m"
 read RMGNOME
 : ${RMGNOME:="N"}
 if [[ ${RMGNOME} == [Yy] ]]; then
