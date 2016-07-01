@@ -206,11 +206,12 @@ if [[ ${CODECS} == [Yy] ]]; then
 fi
 
 ### Install Thunderbird
-echo -ne "\033[32;1mVoulez-vous installer Thunderbird (y/N): \033[0m"
+echo -ne "\033[32;1mVoulez-vous installer Thunderbird à la place d'Evolution (y/N): \033[0m"
 read THUNDERBIRD
 : ${THUNDERBIRD:="N"}
 if [[ ${THUNDERBIRD} == [Yy] ]]; then
   dnf -y install thunderbird
+  dnf -y remove evolution
 fi
 
 ### Install GIT
