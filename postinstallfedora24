@@ -189,6 +189,22 @@ if [[ ${TERMINIX} == [Yy] ]]; then
   dnf -y install terminix
 fi
 
+### Install FISH
+echo -ne "\033[32;1mVoulez-vous installer FishShell (y/N): \033[0m"
+read FISH
+: ${FISH:="N"}
+if [[ ${FISH} == [Yy] ]]; then
+  dnf -y install fish
+  echo -e "\033[34m========================================================================================================\033[0m"
+  echo -e "To use fish as your login shell: use the command 'chsh -s fish'."
+  echo -e ""
+  echo -e "To set your colors, run 'fish_config'"
+  echo -e "To scan your man pages for completions, run 'fish_update_completions'"
+  echo -e "To autocomplete command suggestions press Ctrl + F or right arrow key."
+  echo -e "\033[34m========================================================================================================\033[0m"
+  sleep 5
+fi
+
 ### Install ATOM
 echo -ne "\033[32;1mVoulez-vous installer Atom (via Copr mosquito) (y/N): \033[0m"
 read ATOM
