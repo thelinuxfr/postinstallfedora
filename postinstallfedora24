@@ -47,7 +47,7 @@ echo -e "\033[34m===============================================================
 dnf -y install $LISTE
 
 ### Configuration bashrc
-cat > $HOME/.bashrc << EOL
+cat <<EOF | tee /etc/profile.d/bashrc_custom.sh > /dev/null 2>&1
 #-------------------
 # Alias
 #-------------------
@@ -107,7 +107,7 @@ export PAGER=most
 if [ -f /etc/bash_completion ]; then
 		. /etc/bash_completion
 fi
-EOL
+EOF
 clear
 
 ### Désactiver SELinux
