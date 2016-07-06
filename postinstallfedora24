@@ -22,6 +22,7 @@ if [ $EUID -ne 0 ]; then
 fi
 
 ### Welcome
+clear
 echo -ne "\033[32;1mLe script va effectuer les actions suivantes :\n -activer les dépôts RPMFusion\n -faire les mises à jours\n -installer : \033[0m"
 echo -ne "\033[32;1m$LISTE \n \033[0m"
 echo -ne "\033[32;1mVoulez-vous continuer ? (y/N): \033[0m"
