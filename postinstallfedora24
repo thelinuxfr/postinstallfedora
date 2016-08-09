@@ -124,7 +124,7 @@ echo -ne "\033[32;1mVoulez-vous installer le theme Arc (https://github.com/horst
 read ARCTHEME
 : ${ARCTHEME:="N"}
 if [[ ${ARCTHEME} == [Yy] ]]; then
-  dnf config-manager --add-repo=http://download.opensuse.org/repositories/home:Horst3180/Fedora_24_standard/home:Horst3180.repo
+  dnf config-manager --add-repo http://download.opensuse.org/repositories/home:Horst3180/Fedora_24/home:Horst3180.repo
   dnf -y install arc-theme
 fi
 
