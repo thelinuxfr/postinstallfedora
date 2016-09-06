@@ -1,4 +1,5 @@
 # PostInstallFedora
+[![build status](https://git.lietart.fr/thelinuxfr/postinstallfedora/badges/master/build.svg)](https://git.lietart.fr/thelinuxfr/postinstallfedora/commits/master)
 
 Petit script permettant d'automatiser plusieurs tâches pour Fedora.
 
