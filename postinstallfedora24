@@ -8,7 +8,7 @@
 #
 # Inspired by the project Fedy https://github.com/folkswithhats/fedy
 #
-VERSION="24-20160706"
+# VERSION="24-20160906"
 
 #=============================================================================
 # Liste des applications à installer: A adapter a vos besoins
@@ -26,8 +26,8 @@ clear
 echo -ne "\033[32;1mLe script va effectuer les actions suivantes :\n -activer les dépôts RPMFusion\n -faire les mises à jours\n -installer : \033[0m"
 echo -ne "\033[32;1m$LISTE \n \033[0m"
 echo -ne "\033[32;1mVoulez-vous continuer ? (y/N): \033[0m"
-read WELCOME
-: ${WELCOME:="N"}
+read -r WELCOME
+: "${WELCOME:="N"}"
 if [[ ${WELCOME} == [Nn] ]]; then
   exit 0
 fi
@@ -45,7 +45,7 @@ clear
 echo -e "\033[34m========================================================================================================\033[0m"
 echo "Installation des logiciels suivants: $LISTE"
 echo -e "\033[34m========================================================================================================\033[0m"
-dnf -y install $LISTE
+dnf -y install "$LISTE"
 
 ### Configuration bashrc
 cat <<EOF | tee /etc/profile.d/bashrc_custom.sh > /dev/null 2>&1
@@ -113,16 +113,16 @@ clear
 
 ### Désactiver SELinux
 echo -ne "\033[32;1mVoulez-vous désactiver SELinux (y/N): \033[0m"
-read SELINUX
-: ${SELINUX:="N"}
+read -r SELINUX
+: "${SELINUX:="N"}"
 if [[ ${SELINUX} == [Yy] ]]; then
   sed -i s/^SELINUX=.*$/SELINUX=disabled/g /etc/selinux/config
 fi
 
 ### Install Arc-Theme
 echo -ne "\033[32;1mVoulez-vous installer le theme Arc (https://github.com/horst3180/Arc-theme) (y/N): \033[0m"
-read ARCTHEME
-: ${ARCTHEME:="N"}
+read -r ARCTHEME
+: "${ARCTHEME:="N"}"
 if [[ ${ARCTHEME} == [Yy] ]]; then
   dnf config-manager --add-repo http://download.opensuse.org/repositories/home:Horst3180/Fedora_24/home:Horst3180.repo
   dnf -y install arc-theme
@@ -130,16 +130,16 @@ fi
 
 ### Install MSFONTS
 echo -ne "\033[32;1mVoulez-vous installer les polices Microsoft (y/N): \033[0m"
-read MSFONTS
-: ${MSFONTS:="N"}
+read -r MSFONTS
+: "${MSFONTS:="N"}"
 if [[ ${MSFONTS} == [Yy] ]]; then
   dnf -y install curl cabextract xorg-x11-font-utils fontconfig
 
   CACHEDIR="/tmp/mscorefonts";
   mkdir -p "$CACHEDIR"
-  cd "$CACHEDIR"
+  cd "$CACHEDIR" || exit 0
 
-  URL=$(wget http://mscorefonts2.sourceforge.net/ -O - | grep -Po https://downloads.sourceforge.net/project/mscorefonts2/rpms/msttcore-fonts-installer-[0-9.]{3}-[0-9].noarch.rpm)
+  URL=$(wget http://mscorefonts2.sourceforge.net/ -O - | grep -Po "https://downloads.sourceforge.net/project/mscorefonts2/rpms/msttcore-fonts-installer-[0-9.]{3}-[0-9].noarch.rpm")
   FILE=${URL##*/}
 
   wget -c "$URL" -O "$FILE"
@@ -152,13 +152,13 @@ fi
 
 ### Install SKYPE
 echo -ne "\033[32;1mVoulez-vous installer Skype (y/N): \033[0m"
-read SKYPE
-: ${SKYPE:="N"}
+read -r SKYPE
+: "${SKYPE:="N"}"
 if [[ ${SKYPE} == [Yy] ]]; then
   CACHEDIR="/tmp/skype"
 
   mkdir -p "$CACHEDIR"
-  cd "$CACHEDIR"
+  cd "$CACHEDIR" || exit 0
 
   URL="http://www.skype.com/go/getskype-linux-fc10"
   FILE="skype_linux.rpm"
@@ -174,16 +174,16 @@ fi
 
 ### Install TEAMVIEWER
 echo -ne "\033[32;1mVoulez-vous installer TeamViewer (y/N): \033[0m"
-read TEAMVIEWER
-: ${TEAMVIEWER:="N"}
+read -r TEAMVIEWER
+: "${TEAMVIEWER:="N"}"
 if [[ ${TEAMVIEWER} == [Yy] ]]; then
   dnf -y install http://download.teamviewer.com/download/teamviewer.i686.rpm
 fi
 
 ### Install TERMINIX
 echo -ne "\033[32;1mVoulez-vous installer Terminix (via Copr heikoada) (y/N): \033[0m"
-read TERMINIX
-: ${TERMINIX:="N"}
+read -r TERMINIX
+: "${TERMINIX:="N"}"
 if [[ ${TERMINIX} == [Yy] ]]; then
   dnf copr enable heikoada/terminix
   dnf -y install terminix
@@ -191,8 +191,8 @@ fi
 
 ### Install FISH
 echo -ne "\033[32;1mVoulez-vous installer FishShell (y/N): \033[0m"
-read FISH
-: ${FISH:="N"}
+read -r FISH
+: "${FISH:="N"}"
 if [[ ${FISH} == [Yy] ]]; then
   dnf -y install fish
   echo -e "\033[34m========================================================================================================\033[0m"
@@ -207,8 +207,8 @@ fi
 
 ### Install ATOM
 echo -ne "\033[32;1mVoulez-vous installer Atom (via Copr mosquito) (y/N): \033[0m"
-read ATOM
-: ${ATOM:="N"}
+read -r ATOM
+: "${ATOM:="N"}"
 if [[ ${ATOM} == [Yy] ]]; then
   dnf copr enable mosquito/atom
   dnf -y install atom
@@ -216,16 +216,16 @@ fi
 
 ### Install CODECS
 echo -ne "\033[32;1mVoulez-vous installer les codecs multimédia (y/N): \033[0m"
-read CODECS
-: ${CODECS:="N"}
+read -r CODECS
+: "${CODECS:="N"}"
 if [[ ${CODECS} == [Yy] ]]; then
   dnf -y install gstreamer-plugins-bad gstreamer-plugins-bad-free-extras gstreamer-plugins-bad-nonfree gstreamer-plugins-ugly gstreamer1-libav gstreamer1-plugins-bad-free-extras gstreamer1-plugins-bad-freeworld gstreamer1-plugins-base-tools gstreamer1-plugins-good-extras gstreamer1-plugins-ugly gstreamer1-plugins-bad-free gstreamer1-plugins-good gstreamer1-plugins-base lame flac faac faad2 amrnb amrwb libmad libmatroska xvidcore x264 x265
 fi
 
 ### Install Thunderbird
 echo -ne "\033[32;1mVoulez-vous installer Thunderbird à la place d'Evolution (y/N): \033[0m"
-read THUNDERBIRD
-: ${THUNDERBIRD:="N"}
+read -r THUNDERBIRD
+: "${THUNDERBIRD:="N"}"
 if [[ ${THUNDERBIRD} == [Yy] ]]; then
   dnf -y install thunderbird
   dnf -y remove evolution
@@ -233,32 +233,32 @@ fi
 
 ### Install GIT
 echo -ne "\033[32;1mVoulez-vous installer les outils Git, GitFlow, git-extras et git-ftp (y/N): \033[0m"
-read GIT
-: ${GIT:="N"}
+read -r GIT
+: "${GIT:="N"}"
 if [[ ${GIT} == [Yy] ]]; then
   dnf -y install git gitflow git-extras git-ftp
 fi
 
 ### Install FEDY
 echo -ne "\033[32;1mVoulez-vous installer Fedy (y/N): \033[0m"
-read FEDY
-: ${FEDY:="N"}
+read -r FEDY
+: "${FEDY:="N"}"
 if [[ ${FEDY} == [Yy] ]]; then
   bash -c 'su -c "curl http://folkswithhats.org/fedy-installer -o fedy-installer && chmod +x fedy-installer && ./fedy-installer"'
 fi
 
 ### Install Owncloud-Client
 echo -ne "\033[32;1mVoulez-vous installer Owncloud-Client (y/N): \033[0m"
-read OWNCLOUD
-: ${OWNCLOUD:="N"}
+read -r OWNCLOUD
+: "${OWNCLOUD:="N"}"
 if [[ ${OWNCLOUD} == [Yy] ]]; then
   dnf -y install owncloud-client owncloud-client-nautilus
 fi
 
 ### Install Enpass
 echo -ne "\033[32;1mVoulez-vous installer Enpass (https://www.enpass.io/) (y/N): \033[0m"
-read ENPASS
-: ${ENPASS:="N"}
+read -r ENPASS
+: "${ENPASS:="N"}"
 if [[ ${ENPASS} == [Yy] ]]; then
   dnf -y install libXScrnSaver lsof
   curl -O https://dl.sinew.in/linux/setup/EnpassInstaller
@@ -273,16 +273,16 @@ fi
 
 ### Nettoyage Gnome Apps
 echo -ne "\033[32;1mVoulez-vous supprimer gnome-photos gnome-weather gnome-boxes gnome-clocks gnome-maps (y/N): \033[0m"
-read RMGNOME
-: ${RMGNOME:="N"}
+read -r RMGNOME
+: "${RMGNOME:="N"}"
 if [[ ${RMGNOME} == [Yy] ]]; then
   dnf -y remove gnome-photos gnome-weather gnome-boxes gnome-clocks gnome-maps
 fi
 
 ### Nettoyage DNF
 echo -ne "\033[32;1mVoulez-vous supprimer les dépendances orphelines (y/N): \033[0m"
-read RMDNF
-: ${RMDNF:="N"}
+read -r RMDNF
+: "${RMDNF:="N"}"
 if [[ ${RMDNF} == [Yy] ]]; then
   dnf autoremove
 fi
