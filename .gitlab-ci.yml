@@ -1,0 +1,5 @@
+shellcheck-fedora24:
+  image: rdeavila/docker-shellcheck:latest
+  script:
+    - shellcheck --version
+    - shellcheck -x -s bash postinstallfedora24
