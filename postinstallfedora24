@@ -45,7 +45,8 @@ clear
 echo -e "\033[34m========================================================================================================\033[0m"
 echo "Installation des logiciels suivants: $LISTE"
 echo -e "\033[34m========================================================================================================\033[0m"
-dnf -y install "$LISTE"
+dnf -y install $LISTE
+dnf -y langinstall fr
 
 ### Configuration bashrc
 cat <<EOF | tee /etc/profile.d/bashrc_custom.sh > /dev/null 2>&1
