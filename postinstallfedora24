@@ -275,20 +275,20 @@ if [[ ${OWNCLOUD} == [Yy] ]]; then
 fi
 
 ### Install Enpass
-echo -ne "\033[32;1mVoulez-vous installer Enpass (https://www.enpass.io/) (y/N): \033[0m"
-read -r ENPASS
-: "${ENPASS:="N"}"
-if [[ ${ENPASS} == [Yy] ]]; then
-  dnf -y install libXScrnSaver lsof
-  curl -O https://dl.sinew.in/linux/setup/EnpassInstaller
-  chmod +x EnpassInstaller
-  ./EnpassInstaller
-  rm -f EnpassInstaller
-  echo -e "\033[34m========================================================================================================\033[0m"
-  echo -ne "Extensions Enpass pour votre navigateur : https://www.enpass.io/enpass-browser-extension/"
-  echo -e "\033[34m========================================================================================================\033[0m"
-  sleep 5
-fi
+#echo -ne "\033[32;1mVoulez-vous installer Enpass (https://www.enpass.io/) (y/N): \033[0m"
+#read -r ENPASS
+#: "${ENPASS:="N"}"
+#if [[ ${ENPASS} == [Yy] ]]; then
+#  dnf -y install libXScrnSaver lsof
+#  curl -O https://dl.sinew.in/linux/setup/EnpassInstaller
+#  chmod +x EnpassInstaller
+#  ./EnpassInstaller
+#  rm -f EnpassInstaller
+#  echo -e "\033[34m========================================================================================================\033[0m"
+#  echo -ne "Extensions Enpass pour votre navigateur : https://www.enpass.io/enpass-browser-extension/"
+#  echo -e "\033[34m========================================================================================================\033[0m"
+#  sleep 5
+#fi
 
 ### Nettoyage Gnome Apps
 echo -ne "\033[32;1mVoulez-vous supprimer gnome-photos gnome-weather gnome-boxes gnome-clocks gnome-maps (y/N): \033[0m"
