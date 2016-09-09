@@ -2,4 +2,4 @@ shellcheck-fedora24:
   image: rdeavila/docker-shellcheck:latest
   script:
     - shellcheck --version
-    - shellcheck -x -s bash postinstallfedora24
+    - shellcheck -e SC2086 -x -s bash postinstallfedora24
