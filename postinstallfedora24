@@ -129,6 +129,24 @@ if [[ ${ARCTHEME} == [Yy] ]]; then
   dnf -y install arc-theme
 fi
 
+### Install Paper-Theme
+echo -ne "\033[32;1mVoulez-vous installer le theme Paper (https://snwh.org/paper) (y/N): \033[0m"
+read -r PAPER
+: "${PAPER:="N"}"
+if [[ ${PAPER} == [Yy] ]]; then
+  dnf config-manager --add-repo http://download.opensuse.org/repositories/home:snwh:paper/Fedora_24/home:snwh:paper.repo
+  dnf -y install paper-gtk-theme paper-icon-theme
+fi
+
+### Install Moka-Theme
+echo -ne "\033[32;1mVoulez-vous installer le theme Moka (https://snwh.org/moka) (y/N): \033[0m"
+read -r MOKA
+: "${MOKA:="N"}"
+if [[ ${MOKA} == [Yy] ]]; then
+  dnf config-manager --add-repo http://download.opensuse.org/repositories/home:snwh:moka/Fedora_24/home:snwh:moka.repo
+  dnf -y install moka-icon-theme faba-icon-theme
+fi
+
 ### Install MSFONTS
 echo -ne "\033[32;1mVoulez-vous installer les polices Microsoft (y/N): \033[0m"
 read -r MSFONTS
