@@ -8,7 +8,7 @@
 #
 # Inspired by the project Fedy https://github.com/folkswithhats/fedy
 #
-# VERSION="24-20170104"
+# VERSION="25-20170104"
 
 #=============================================================================
 # Liste des applications à installer: A adapter a vos besoins
@@ -33,8 +33,8 @@ if [[ ${WELCOME} == [Nn] ]]; then
 fi
 
 ### Update
-rpm --quiet --query rpmfusion-free-release || dnf -y --nogpgcheck install http://download1.rpmfusion.org/free/fedora/rpmfusion-free-release-24.noarch.rpm
-rpm --quiet --query rpmfusion-nonfree-release || dnf -y --nogpgcheck install http://download1.rpmfusion.org/nonfree/fedora/rpmfusion-nonfree-release-24.noarch.rpm
+rpm --quiet --query rpmfusion-free-release || dnf -y --nogpgcheck install http://download1.rpmfusion.org/free/fedora/rpmfusion-free-release-25.noarch.rpm
+rpm --quiet --query rpmfusion-nonfree-release || dnf -y --nogpgcheck install http://download1.rpmfusion.org/nonfree/fedora/rpmfusion-nonfree-release-25.noarch.rpm
 echo -e "\033[34m========================================================================================================\033[0m"
 echo "Mises à jours du système"
 echo -e "\033[34m========================================================================================================\033[0m"
@@ -125,7 +125,7 @@ echo -ne "\033[32;1mVoulez-vous installer le theme Arc (https://github.com/horst
 read -r ARCTHEME
 : "${ARCTHEME:="N"}"
 if [[ ${ARCTHEME} == [Yy] ]]; then
-  dnf config-manager --add-repo http://download.opensuse.org/repositories/home:Horst3180/Fedora_24/home:Horst3180.repo
+  dnf config-manager --add-repo http://download.opensuse.org/repositories/home:Horst3180/Fedora_25/home:Horst3180.repo
   dnf -y install arc-theme
 fi
 
@@ -134,7 +134,7 @@ echo -ne "\033[32;1mVoulez-vous installer le theme Paper (https://snwh.org/paper
 read -r PAPER
 : "${PAPER:="N"}"
 if [[ ${PAPER} == [Yy] ]]; then
-  dnf config-manager --add-repo http://download.opensuse.org/repositories/home:snwh:paper/Fedora_24/home:snwh:paper.repo
+  dnf config-manager --add-repo http://download.opensuse.org/repositories/home:snwh:paper/Fedora_25/home:snwh:paper.repo
   dnf -y install paper-gtk-theme paper-icon-theme
 fi
 
@@ -143,7 +143,7 @@ echo -ne "\033[32;1mVoulez-vous installer le theme Moka (https://snwh.org/moka) 
 read -r MOKA
 : "${MOKA:="N"}"
 if [[ ${MOKA} == [Yy] ]]; then
-  dnf config-manager --add-repo http://download.opensuse.org/repositories/home:snwh:moka/Fedora_24/home:snwh:moka.repo
+  dnf config-manager --add-repo http://download.opensuse.org/repositories/home:snwh:moka/Fedora_25/home:snwh:moka.repo
   dnf -y install moka-icon-theme faba-icon-theme
 fi
 
@@ -215,7 +215,7 @@ read -r FISH
 if [[ ${FISH} == [Yy] ]]; then
   dnf -y install fish
   echo -e "\033[34m========================================================================================================\033[0m"
-  echo -e "To use fish as your login shell: use the command 'chsh -s fish'."
+  echo -e "To use fish as your login shell: use the command 'sudo usermod -s fish $USER'."
   echo -e ""
   echo -e "To set your colors, run 'fish_config'"
   echo -e "To scan your man pages for completions, run 'fish_update_completions'"
