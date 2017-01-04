@@ -3,3 +3,8 @@ shellcheck-fedora24:
   script:
     - shellcheck --version
     - shellcheck -e SC2086 -x -s bash postinstallfedora24
+shellcheck-fedora25:
+  image: rdeavila/docker-shellcheck:latest
+  script:
+    - shellcheck --version
+    - shellcheck -e SC2086 -x -s bash postinstallfedora25
