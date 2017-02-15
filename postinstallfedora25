@@ -213,6 +213,7 @@ echo -ne "\033[32;1mVoulez-vous installer FishShell (y/N): \033[0m"
 read -r FISH
 : "${FISH:="N"}"
 if [[ ${FISH} == [Yy] ]]; then
+  dnf config-manager --add-repo http://download.opensuse.org/repositories/shells:fish:release:2/Fedora_25/shells:fish:release:2.repo
   dnf -y install fish
   echo -e "\033[34m========================================================================================================\033[0m"
   echo -e "To use fish as your login shell: use the command 'sudo usermod -s fish $USER'."
