@@ -197,13 +197,13 @@ if [[ ${TEAMVIEWER} == [Yy] ]]; then
   dnf -y install http://download.teamviewer.com/download/teamviewer.i686.rpm
 fi
 
-### Install TERMINIX
-echo -ne "\033[32;1mVoulez-vous installer Terminix (via Copr heikoada) (y/N): \033[0m"
-read -r TERMINIX
-: "${TERMINIX:="N"}"
-if [[ ${TERMINIX} == [Yy] ]]; then
+### Install TILIX
+echo -ne "\033[32;1mVoulez-vous installer Tilix (via Copr heikoada) (y/N): \033[0m"
+read -r TILIX
+: "${TILIX:="N"}"
+if [[ ${TILIX} == [Yy] ]]; then
   dnf copr enable heikoada/terminix
-  dnf -y install terminix
+  dnf -y install tilix
 fi
 
 ### Install FISH
