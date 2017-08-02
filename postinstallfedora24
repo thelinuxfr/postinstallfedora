@@ -169,7 +169,7 @@ if [[ ${MSFONTS} == [Yy] ]]; then
 fi
 
 ### Install SKYPE
-echo -ne "\033[32;1mVoulez-vous installer Skype (y/N): \033[0m"
+echo -ne "\033[32;1mVoulez-vous installer Skype (64bits) (y/N): \033[0m"
 read -r SKYPE
 : "${SKYPE:="N"}"
 if [[ ${SKYPE} == [Yy] ]]; then
@@ -178,15 +178,14 @@ if [[ ${SKYPE} == [Yy] ]]; then
   mkdir -p "$CACHEDIR"
   cd "$CACHEDIR" || exit 0
 
-  URL="http://www.skype.com/go/getskype-linux-fc10"
-  FILE="skype_linux.rpm"
+  URL="https://go.skype.com/skypeforlinux-64.rpm"
+  FILE="skypeforlinux.rpm"
 
   wget -c "$URL" -O "$FILE"
 
   if [[ ! -f "$FILE" ]]; then
     exit 1
   fi
-    dnf -y install gtk2-engines.i686
     dnf -y install $FILE
 fi
 
