@@ -121,11 +121,10 @@ if [[ ${SELINUX} == [Yy] ]]; then
 fi
 
 ### Install Arc-Theme
-echo -ne "\033[32;1mVoulez-vous installer le theme Arc (https://github.com/horst3180/Arc-theme) (y/N): \033[0m"
+echo -ne "\033[32;1mVoulez-vous installer le theme Arc (y/N): \033[0m"
 read -r ARCTHEME
 : "${ARCTHEME:="N"}"
 if [[ ${ARCTHEME} == [Yy] ]]; then
-  dnf config-manager --add-repo http://download.opensuse.org/repositories/home:Horst3180/Fedora_24/home:Horst3180.repo
   dnf -y install arc-theme
 fi
 
